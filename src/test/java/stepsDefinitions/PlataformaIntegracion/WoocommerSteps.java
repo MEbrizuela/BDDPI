@@ -71,10 +71,8 @@ public class WoocommerSteps {
     public void losNumerosDePedidoSeVisualizanDentroDeLaPlataformaMiCorreo() {
         pageCheckOut.visualizarGrillaMiCorreo();
     }
-    @Then("el monto de la cotizacion en MiCorreo coincide con la del ecommerce")
-    public void elMontoDeLaCotizacionEnMiCorreoCoincideConLaDelEcommerce() {
+    @Then("los datos en MiCorreo coinciden con los del ecommerce")
+    public void losDatosEnMiCorreoCoincideConLosDelEcommerce() {
         pageCheckOut.obtenerContenidoTabla(By.xpath("//table[@class='table table-hover mcr-table table-responsive']"),pedidoImportado);
-
     }
-
 }
