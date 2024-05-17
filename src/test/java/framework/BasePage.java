@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.sound.midi.Soundbank;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -111,6 +112,13 @@ public class BasePage {
         return textoDelSitio.equals(textoEsperado);
     }
 
+    public String extraerNumeros(By locator) {
+        WebElement element = driver.findElement(locator);
+        String texto = element.getText();
+        String numeros = texto.replaceAll("[^0-9]", "");
+        return numeros;
+    }
+
     public static void waitForSeconds(int seconds) {
         try {
             Thread.sleep(seconds * 1000);
@@ -143,6 +151,19 @@ public class BasePage {
         } else {
             System.out.println("No se encontraron elementos en el dropdown con el locator proporcionado: " + locator);
         }
+    }
+    // Método para seleccionar una opción de un elemento <select> por texto visible
+    protected void seleccionarOpcionPorTextoVisible(By locator, String textoVisible) {
+        WebElement selectElement = driver.findElement(locator);
+        Select select = new Select(selectElement);
+        select.selectByVisibleText(textoVisible);
+    }
+
+    // Método para seleccionar una opción de un elemento <select> por valor
+    protected void seleccionarOpcionPorValor(By locator, String valor) {
+        WebElement selectElement = driver.findElement(locator);
+        Select select = new Select(selectElement);
+        select.selectByValue(valor);
     }
 
     public void scrollToBottom() {
@@ -227,6 +248,30 @@ public class BasePage {
         driver.switchTo().frame(nameOrId);
     }
 
+    // Método para abrir una nueva pestaña y navegar a una URL
+    public void abrirNuevaPestanaYNavegarA(String url) {
+        try {
+            // Ejecutar JavaScript para abrir una nueva pestaña
+            ((JavascriptExecutor) driver).executeScript("window.open()");
+
+            // Cambiar el foco al nuevo tab
+            switchToNewTab();
+
+            // Navegar a la URL proporcionada
+            driver.get(url);
+        } catch (WebDriverException e) {
+            System.out.println("No se pudo abrir una nueva pestaña: " + e.getMessage());
+        }
+    }
+    // Método para cambiar el foco al nuevo tab
+    private void switchToNewTab() {
+        // Obtener todas las ventanas o tabs abiertas
+        for (String ventana : driver.getWindowHandles()) {
+            // Cambiar el foco a la nueva ventana
+            driver.switchTo().window(ventana);
+            break; // Salir después de cambiar al nuevo tab
+        }
+    }
 
     // Método para validar la existencia de un campo por su XPath
     public boolean validarCampoExistente(By locator) {
@@ -272,18 +317,49 @@ public class BasePage {
         }
     }
 
+    public void imprimirContenidoTabla(By tablaLocator) {
+        WebElement tabla = driver.findElement(tablaLocator);
 
-    public void waitForElementAndClick(By locator) {
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        // Localiza todas las filas de la tabla
+        List<WebElement> filas = tabla.findElements(By.tagName("tr"));
 
-        try {
-            element.click();
-            element.click();
-            element.click();
-        }
-        catch (Exception e) {
-            element.click();
-        }
+        // Itera sobre las filas para obtener los valores
+        for (WebElement fila : filas) {
+            // Localiza todas las celdas de la fila
+            List<WebElement> celdas = fila.findElements(By.tagName("td"));
+            // Imprime el texto de cada celda
+            for (WebElement celda : celdas) {
+                System.out.print(celda.getText() + " ");
+            }
+            System.out.println(); // Salto de línea entre filas
         }
     }
+    public List<List<String>> obtenerContenidoTabla(By tablaLocator, String valorBuscado) {
+        List<List<String>> contenidoTabla = new ArrayList<>();
+        WebElement tabla = driver.findElement(tablaLocator);
+        // Localiza todas las filas de la tabla
+        List<WebElement> filas = tabla.findElements(By.tagName("tr"));
+        // Itera sobre las filas para obtener los valores
+        for (WebElement fila : filas) {
+            // Lista para almacenar las celdas de la fila actual
+            List<String> celdasFila = new ArrayList<>();
+            // Localiza todas las celdas de la fila
+            List<WebElement> celdas = fila.findElements(By.tagName("td"));
+            // Agrega el texto de cada celda a la lista de celdas de la fila actual
+            for (WebElement celda : celdas) {
+                String textoCelda = celda.getText();
+                celdasFila.add(textoCelda);
+                // Si la celda contiene el valor buscado, puedes hacer algo aquí
+                if (textoCelda.equals(valorBuscado)) {
+                    System.out.println("Valor encontrado en la tabla: " + textoCelda);
+                    // Puedes realizar alguna acción específica, como romper el bucle o almacenar la fila que contiene el valor buscado
+                }
+            }
+            // Agrega la lista de celdas de la fila actual a la lista de filas
+            contenidoTabla.add(celdasFila);
+        }
+        return contenidoTabla;
+    }
+
+}
 

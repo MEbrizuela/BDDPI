@@ -7,24 +7,22 @@ import org.openqa.selenium.WebDriver;
 public class Dashboard extends BasePage {
 
     private By usrlocator = By.xpath("//input[@id='user_login']");
-
     private By passlocator = By.xpath("//input[@id='user_pass']");
-
     private By btnLogin = By.xpath("//input[@id='wp-submit']");
-
     private By lblCorreo = By.xpath("//div[@class='wp-menu-name' and contains(text(),'Correo')]");
-
     private By SubCorreoArg = By.xpath("//a[@class='wp-first-item' and normalize-space()='Correo Argentino']");
-
-    private By SubConexionApi = By.xpath("//*[@id=\"toplevel_page_correoargentino-orders\"]/ul/li[3]/a");
-
+    private By SubConexionApi = By.xpath("//*[@id='toplevel_page_correoargentino-orders']/ul/li[3]/a");
     private By SubDatosComerciales = By.xpath("//*[@id='toplevel_page_correoargentino-orders']/ul/li[4]/a");
-
-    private By lblEcommerce = By.xpath("//li[@id='wp-admin-bar-site-name']");
-
+    private By myWordpressLocator = By.xpath("//li[@id='wp-admin-bar-site-name']");
     private By btnVisitarSitio = By.xpath("//*[@id='wp-admin-bar-view-site']/a");
-
     private By btnVisitarTienda = By.xpath("//*[@id='wp-admin-bar-view-store']/a");
+    private By numeroPedido = By.xpath("//*[@class='woocommerce-order-overview__order order' and strong]");
+    private By wooCommerce = By.xpath("//div[@class='wp-menu-name' and normalize-space()='WooCommerce']");
+    private By pedidosLocator = By.xpath("//a[normalize-space()='Pedidos']");
+    private By dropdownLocator = By.xpath("(//select[@name='bulk-actions-top' and @class='bulk-actions-top'])[1]");
+    private By btnAplicar = By.xpath("(//input[@type='submit' and @value='Aplicar'])[1]");
+
+
 
     public Dashboard(WebDriver driver) {
         super(driver);
@@ -34,18 +32,18 @@ public class Dashboard extends BasePage {
     public void verificarUsrAndPass(){
         // Verifica la existencia del campo de usuario
         boolean usrExists = validarCampoExistente(usrlocator);
-        // Verifica la existencia del campo de contraseña
+        // Verifica la existencia del campo de contraseï¿½a
         boolean passExists = validarCampoExistente(passlocator);
 
         // Imprime mensajes en la consola sobre la existencia de los campos
         if (usrExists && passExists) {
-            System.out.println("Los campos de usuario y contraseña existen.");
+            System.out.println("Los campos de usuario y contraseï¿½a existen.");
         } else if (usrExists) {
-            System.out.println("El campo de usuario existe, pero el campo de contraseña no.");
+            System.out.println("El campo de usuario existe, pero el campo de contraseï¿½a no.");
         } else if (passExists) {
-            System.out.println("El campo de contraseña existe, pero el campo de usuario no.");
+            System.out.println("El campo de contraseï¿½a existe, pero el campo de usuario no.");
         } else {
-            System.out.println("Ni el campo de usuario ni el campo de contraseña existen.");
+            System.out.println("Ni el campo de usuario ni el campo de contraseï¿½a existen.");
         }
     }
 
@@ -79,9 +77,9 @@ public class Dashboard extends BasePage {
         } else if (SubmenuSubCorreoArg) {
             System.out.println("El campo de usuario existe, pero el campo de Correo Arg no.");
         } else if (SubmenuSubConexionApi) {
-            System.out.println("El campo de contraseña existe, pero el campo de Conexion APi no.");
+            System.out.println("El campo de contraseï¿½a existe, pero el campo de Conexion APi no.");
         } else if (SubmenuSubDatosComerciales) {
-            System.out.println("El campo de contraseña existe, pero el campo de Datos Comerciales no.");
+            System.out.println("El campo de contraseï¿½a existe, pero el campo de Datos Comerciales no.");
         } else {
             System.out.println("Los Elementos buscados no exiten.");
         }
@@ -89,7 +87,7 @@ public class Dashboard extends BasePage {
 
     public void ingresarEcommerce(){
 
-        posicionarCursorEnElemento(lblEcommerce);
+        posicionarCursorEnElemento(myWordpressLocator);
         validarCampoExistente(btnVisitarSitio);
         validarCampoExistente(btnVisitarTienda);
 
@@ -105,13 +103,31 @@ public class Dashboard extends BasePage {
         } else if (SubmenuSitio) {
             System.out.println("El campo de usuario existe, pero el campo de Visitar Sitio no.");
         } else if (SubmenuTienda) {
-            System.out.println("El campo de contraseña existe, pero el campo de Visitar Tienda no.");
+            System.out.println("El campo de contraseï¿½a existe, pero el campo de Visitar Tienda no.");
         } else {
             System.out.println("Los Elementos buscados no exiten.");
         }
 
         waitForSeconds(2);
-        click(lblEcommerce);
+        click(myWordpressLocator);
         System.out.println("Ingreso correcto al Ecommerce");
+    }
+
+    public String importarPedido(){
+        String Pedido = extraerNumeros(numeroPedido);
+        click(myWordpressLocator);
+        posicionarCursorEnElemento(lblCorreo);
+        waitForSeconds(2);
+        click(By.xpath("//a[contains(text(),'Correo Argentino')]"));
+        // Generar el XPath dinÃ¡mico concatenando el nÃºmero de pedido al XPath deseado
+        String xpathPedido = "//input[@value='" + Pedido + "']";
+        // Hacer clic en el elemento generado utilizando el XPath dinÃ¡mico
+        click(By.xpath(xpathPedido));
+        waitForSeconds(2);
+        seleccionarOpcionPorValor(dropdownLocator, "importar");
+        waitForSeconds(1);
+        click(btnAplicar);
+        waitForSeconds(5);
+        return Pedido;
     }
 }

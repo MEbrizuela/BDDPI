@@ -9,7 +9,6 @@ Feature: Flujo principal de usuario en el sistema de ecommerce
     When ingresa al ecommerce
     And anade articulos al carrito
     And realiza el proceso de checkout obteniendo los numeros de pedido y monto de cotizacion
-    Then se visualizan los numeros de pedido en el dashboard
-    And se pueden exportar los números de pedido
-    And los números de pedido se visualizan dentro de la plataforma MiCorreo
-    And el monto de la cotización en MiCorreo coincide con la del ecommerce
+    And se visualizan los numeros de pedido en el dashboard y se importa el mismo
+    Then los numeros de pedido se visualizan dentro de la plataforma MiCorreo
+    And el monto de la cotizacion en MiCorreo coincide con la del ecommerce

@@ -1,3 +1,19 @@
 
 T
 $src/test/java/runner/TestRunner.java,1\8\18b3e1953776f096053d202d655721ec032799e7
+U
+%src/test/java/framework/BasePage.java,9\1\91d9b91b40d16001624bb913962ba134ecafc053
+x
+Hsrc/test/java/stepsDefinitions/PlataformaIntegracion/WoocommerSteps.java,3\0\3084c6959ca64af98551fed151545ee3e8cf7b92
+g
+7src/test/java/page/PlataformaIntegracion/Dashboard.java,d\6\d6a40b5655e338830368f4b3eec3cca2cd1cefb9
+r
+Bsrc/test/java/page/PlataformaIntegracion/Woocommerce/CheckOut.java,b\8\b880205fa2bdbc3c97e0d273c72d8bd58a05c07b
+q
+Asrc/test/java/page/PlataformaIntegracion/Woocommerce/Carrito.java,f\7\f7cf94b60627a233e6784cf8c9957a3ca53c7dfd
+a
+1src/test/java/page/MiCorreo1_5/PageHomeLogin.java,0\f\0f764bf8d83c0e533d0c2e16c7fb52fcc07b8da7
+b
+2src/test/java/page/MiCorreo1_5/PageNuevoEnvio.java,3\e\3e8db8edd27e9117d725b51d9e937cc7cb221bf4
+`
+0src/test/java/page/MiCorreo1_5/PageCheckOut.java,7\6\7697e40402f29ac63c97153adadff3fa704f1fe9
